@@ -1,0 +1,1 @@
+define_word factorial 1 if equal 0 argument 1 1 multiply argument 1 factorial add -1 argument 1

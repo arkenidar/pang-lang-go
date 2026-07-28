@@ -1,0 +1,17 @@
+#!/usr/bin/env pangea-italian
+
+definisci_parola "multiplo" 2
+  uguale 0 modulo argomento 2 argomento 1
+
+metti "i" 1
+mentre non maggiore prendi "i" 20 fai
+  se multiplo 15 prendi "i"
+    stampa " FizzBuzz ... multiplo di 15 "
+  se multiplo 3 prendi "i"
+    stampa " Fizz ... multiplo di 3 "
+  se multiplo 5 prendi "i"
+    stampa " Buzz ... multiplo di 5 "
+  stampa prendi "i"
+  
+  incrementa "i"
+fine

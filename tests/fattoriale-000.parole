@@ -1,0 +1,6 @@
+definisci_parola fattoriale 1
+  se uguale 0 argomento 1
+    1
+    moltiplica
+      argomento 1 
+      fattoriale somma -1 argomento 1

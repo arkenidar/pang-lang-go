@@ -1,0 +1,6 @@
+do
+execute_words_file fizzbuzz.words
+execute_words_file factorial.words
+print factorial 3
+execute
+end

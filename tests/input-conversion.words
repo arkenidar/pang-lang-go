@@ -1,0 +1,5 @@
+#!/usr/bin/env pangea
+
+print " input conversion behavior "
+print to_number "42"
+print to_number "abc"

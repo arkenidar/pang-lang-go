@@ -1,0 +1,9 @@
+#!/usr/bin/env pangea
+
+print " escape quote: \"ok\" "
+print " escape slash: \\ "
+print "line1\nline2"
+print "tab:\tvalue"
+
+set "message" "quoted literals are canonical"
+print get "message"

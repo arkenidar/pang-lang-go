@@ -1,0 +1,6 @@
+stampa : " fattoriale di 4 (4!) gioco matematico "
+! : fattoriale-001.parole
+stampa fattoriale 4
+
+stampa : " Fizz-Buzz gioco matematico "
+! : fizzbuzz-003.parole

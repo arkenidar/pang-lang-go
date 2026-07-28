@@ -1,0 +1,1 @@
+do set i 1 while not greater get i 20 do if equal 0 modulus get i 15 print string FizzBuzz if equal 0 modulus get i 3 print string Fizz if equal 0 modulus get i 5 print string Buzz print get i set i add get i 1 end end

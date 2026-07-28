@@ -1,0 +1,11 @@
+metti i 1
+mentre non maggiore prendi i 20 fai
+  se uguale 0 modulo prendi i 15
+    stampa stringa " FizzBuzz ... multiplo di 15 "
+  se uguale 0 modulo prendi i 3
+    stampa stringa " Fizz ... multiplo di 3 "
+  se uguale 0 modulo prendi i 5
+    stampa stringa " Buzz ... multiplo di 5 "
+  stampa prendi i
+  metti i somma prendi i 1
+fine
