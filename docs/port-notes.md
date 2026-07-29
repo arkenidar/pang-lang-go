@@ -3,14 +3,58 @@
 Technical notes on porting the pang interpreter from Lua
 (`pangea/src/pangea1/main.lua`) to Go (`main.go`).
 
+## Provenance: Source File Relationships
+
+The five related files and how they connect:
+
+```
+pangea/src/pangea1/main.lua  (original canonical v028, 561 LOC)
+  |
+  |--- main.go                 (Go port, structurally reorganized, 615 LOC)
+  |      |
+  |      `--- main_go_structured.lua  (reverse-port — Lua mirror of main.go's
+  |                                     section ordering, for 1:1 correspondence)
+  |
+  |--- pangea/ark/lua/latest.lua       (near-canonical v028, 590 LOC;
+  |                                     subset of main.lua — no file_directory_stack,
+  |                                     no hashbang_remove, no repeat/read_text/to_number)
+  |
+  `--- pangea/ark/lua/pang-028.lua     (historical snapshot, 506 LOC;
+                                        legacy `:` string syntax, no string_literals array)
+```
+
+| File                          | LOC | Role                                                              |
+| :---------------------------- | :-- | :---------------------------------------------------------------- |
+| `pangea/src/pangea1/main.lua` | 561 | **Canonical v028** — original source for `main.go`                |
+| `main.go`                     | 615 | **Go port** — reorganized for Go's compilation model              |
+| `main_go_structured.lua`      | 564 | **Structural mirror** — Lua back-port matching `main.go`'s layout |
+| `pangea/ark/lua/latest.lua`   | 590 | Near-canonical v028, subset of `main.lua`                         |
+| `pangea/ark/lua/pang-028.lua` | 506 | Historical snapshot with legacy `:` syntax                        |
+
+### Structural Reorganization in `main.go`
+
+The original `main.lua` scatters `word_definitions[x] = {n, f}` assignments
+throughout the file (some before `phrase_length`, some after `evaluate_word`,
+some at the very bottom). The Go port gathers all definitions into a single
+`wordDefsInit()` function and organizes sections as:
+
+1. Types → Global State → Italian Translation → File Path Utilities
+2. Centralized `wordDefsInit()` (all 21 built-in words)
+3. Tokenizer (`programWords`, `hashbangRemove`)
+4. Core Evaluator (`phraseLength`, `evaluateWord`)
+5. Program Execution (`executeProgram`, `executeWordsFile`, REPL)
+6. `main()`
+
+`main_go_structured.lua` follows this exact layout so that every line of
+`main.go` has a direct Lua counterpart.
+
 ## Size Comparison
 
-| Metric         | Lua        | Go        | Delta            |
-| :------------- | :--------- | :-------- | :--------------- |
-| Lines of code  | 561        | 615       | +54 (+9.6%)      |
-| Source file    | `main.lua` | `main.go` | —                |
-| Built-in words | 21         | 21        | identical        |
-| Binary size    | runtime    | ~2.1 MB   | Go static binary |
+| Metric         | main.lua | main.go | main_go_structured.lua | Delta (main.lua → main.go) |
+| :------------- | :------- | :------ | :--------------------- | :------------------------- |
+| Lines of code  | 561      | 615     | 564                    | +54 (+9.6%)                |
+| Built-in words | 21       | 21      | 21                     | identical                  |
+| Binary size    | runtime  | ~2.1 MB | runtime                | Go static binary           |
 
 ## Key Porting Decisions
 

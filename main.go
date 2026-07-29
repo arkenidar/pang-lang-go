@@ -1,5 +1,15 @@
 // Pang: Polish notation language interpreter (v028) — Go port
-// Ported from src/pangea1/main.lua and ark/lua/latest.lua
+//
+// Directly ported from pangea/src/pangea1/main.lua (canonical v028, 561 LOC).
+// Structural reorganization: word definitions scattered throughout main.lua
+// are gathered into wordDefsInit() for Go's compilation model.
+// For a Lua file matching this Go structure 1:1, see main_go_structured.lua.
+//
+// Provenance chain:
+//   pangea/src/pangea1/main.lua → main.go → main_go_structured.lua
+//   (canonical v028)              (Go port)  (Lua structural mirror)
+//   pangea/ark/lua/latest.lua — near-canonical subset (no file_directory_stack etc.)
+//   pangea/ark/lua/pang-028.lua — historical snapshot (legacy `:` string syntax)
 package main
 
 import (
