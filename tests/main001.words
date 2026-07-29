@@ -1,6 +1,3 @@
-do
-execute_words_file fizzbuzz001.words
-execute_words_file factorial001.words
+! "fizzbuzz.words"
+! "factorial.words"
 print factorial 3
-execute
-end

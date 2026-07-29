@@ -1,4 +1,4 @@
-definisci_parola fattoriale 1
+definisci_parola "fattoriale" 1
   se uguale 0 argomento 1
     1
     moltiplica

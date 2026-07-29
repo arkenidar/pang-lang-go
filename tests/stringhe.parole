@@ -1,5 +1,3 @@
-#!/usr/bin/env pangea-italian
-
 stampa " escape quote: \"ok\" "
 stampa " escape slash: \\ "
 stampa "riga1\nriga2"

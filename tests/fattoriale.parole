@@ -1,5 +1,3 @@
-#!/usr/bin/env pangea-italian
-
 definisci_parola "fattoriale" 1
   se uguale 0 argomento 1
     1

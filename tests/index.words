@@ -1,6 +1,4 @@
-do
 print "Starting tests"
-! factorial-canonical.words
-! fizzbuzz-canonical.words
+! "factorial-canonical.words"
+! "fizzbuzz-canonical.words"
 print "Done"
-end
