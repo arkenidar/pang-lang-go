@@ -77,6 +77,8 @@ var translateItalian = map[string]string{
 	"to_number":           "numero_da_testo",
 	"repeat":              "ripeti",
 	"increment":           "incrementa",
+	"and":                 "e",
+	"or":                  "o",
 }
 
 func tr(s string) string {
@@ -224,6 +226,16 @@ func wordDefsInit() {
 	// not <boolean>
 	wordDefs[tr("not")] = WordDef{1, func(args []int) interface{} {
 		return !truthy(evaluateWord(args[0]))
+	}}
+
+	// and <boolean> <boolean>
+	wordDefs[tr("and")] = WordDef{2, func(args []int) interface{} {
+		return truthy(evaluateWord(args[0])) && truthy(evaluateWord(args[1]))
+	}}
+
+	// or <boolean> <boolean>
+	wordDefs[tr("or")] = WordDef{2, func(args []int) interface{} {
+		return truthy(evaluateWord(args[0])) || truthy(evaluateWord(args[1]))
 	}}
 
 	// equal <first> <second>

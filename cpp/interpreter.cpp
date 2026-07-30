@@ -53,6 +53,8 @@ namespace pang
         {"to_number", "numero_da_testo"},
         {"repeat", "ripeti"},
         {"increment", "incrementa"},
+        {"and", "e"},
+        {"or", "o"},
     };
 
     // =========================================================================
@@ -669,6 +671,14 @@ namespace pang
         // not <boolean>
         wordDefs[tr("not")] = {1, [this](const std::vector<int> &args) -> Value
                                { return !truthy(evaluateWord(args[0])); }};
+
+        // and <boolean> <boolean>
+        wordDefs[tr("and")] = {2, [this](const std::vector<int> &args) -> Value
+                               { return truthy(evaluateWord(args[0])) && truthy(evaluateWord(args[1])); }};
+
+        // or <boolean> <boolean>
+        wordDefs[tr("or")] = {2, [this](const std::vector<int> &args) -> Value
+                              { return truthy(evaluateWord(args[0])) || truthy(evaluateWord(args[1])); }};
 
         // equal <first> <second>
         wordDefs[tr("equal")] = {2, [this](const std::vector<int> &args) -> Value

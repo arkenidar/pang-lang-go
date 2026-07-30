@@ -45,6 +45,8 @@ local translate_italian = {
     ["caller_set"] = "metti_chiamante",
     ["caller_get"] = "prendi_chiamante",
     ["while"] = "mentre",
+    ["and"] = "e",
+    ["or"] = "o",
     ["not"] = "non",
     ["greater"] = "maggiore",
     ["if"] = "se",
@@ -178,6 +180,16 @@ function word_defs_init()
             result = evaluate_word(arguments[2])
         end
         return result
+    end}
+
+    -- and <boolean> <boolean>
+    word_definitions[tr("and")] = {2, function(arguments)
+        return truthy(evaluate_word(arguments[1])) and truthy(evaluate_word(arguments[2]))
+    end}
+
+    -- or <boolean> <boolean>
+    word_definitions[tr("or")] = {2, function(arguments)
+        return truthy(evaluate_word(arguments[1])) or truthy(evaluate_word(arguments[2]))
     end}
 
     -- not <boolean>
