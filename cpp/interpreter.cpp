@@ -441,14 +441,32 @@ namespace pang
 
     void PangInterpreter::readExecuteLoop()
     {
+        bool reopenedTty = false;
         std::string line;
         while (!exitRequested)
         {
             std::cout << "> " << std::flush;
             if (!std::getline(std::cin, line))
             {
+                // EOF on stdin — try to reopen from the terminal so the
+                // user can continue the REPL interactively.  Only do this
+                // once; a second EOF means the user really wants to quit.
+                if (!reopenedTty)
+                {
+                    reopenedTty = true;
+                    std::cin.clear();
+                    if (freopen("/dev/tty", "r", stdin) != nullptr)
+                    {
+                        line.clear();
+                        continue;
+                    }
+                }
                 break;
             }
+
+            // Reset the flag when we successfully read a line (user is
+            // interacting — give them a fresh EOF counter next time).
+            reopenedTty = false;
 
             // Skip empty input.
             if (line.empty())

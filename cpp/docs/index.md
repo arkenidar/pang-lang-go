@@ -31,4 +31,26 @@ g++ -std=c++17 -O2 -o cpp/pang cpp/main.cpp cpp/interpreter.cpp
 ./cpp/pang tests/factorial.words -  # Run file then enter REPL
 ```
 
+### Piped Input
+
+Commands can be piped to the interpreter. After processing piped input, the REPL
+reopens `/dev/tty` to stay open for interactive use. Include `exit` (or `esci`
+in Italian mode) to quit after piped commands:
+
+```bash
+# Pipe commands then continue interactive REPL:
+echo "print 333" | ./cpp/pang
+
+# Pipe commands then exit:
+echo "print 333 exit" | ./cpp/pang
+
+# Italian mode with factorial file:
+echo "stampa fattoriale 5" | ./cpp/pang italian tests/fattoriale.parole -
+echo "stampa fattoriale 5 esci" | ./cpp/pang italian tests/fattoriale.parole -
+```
+
+> **⚠️ Do not combine `rlwrap` with piped input.** `rlwrap` expects a real
+> terminal; piping stdin breaks it. Use `rlwrap` only for interactive sessions
+> (`rlwrap ./cpp/pang`) and pipe directly to `./cpp/pang` for scripted input.
+
 [← Back to README](../../README.md)
