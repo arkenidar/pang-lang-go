@@ -1,0 +1,10 @@
+metti "somma" 0
+metti "i" 1
+
+ripeti 10 fai
+  metti "somma" somma prendi "somma" prendi "i"
+  metti "i" somma prendi "i" 1
+fine
+
+stampa "Somma di 1..10:"
+stampa prendi "somma"

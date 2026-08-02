@@ -1,0 +1,11 @@
+metti "i" 1
+mentre non maggiore prendi "i" 20 fai
+  se uguale 0 modulo prendi "i" 15
+    stampa "FizzBuzz"
+  se uguale 0 modulo prendi "i" 3
+    stampa "Fizz"
+  se uguale 0 modulo prendi "i" 5
+    stampa "Buzz"
+  stampa prendi "i"
+  metti "i" somma prendi "i" 1
+fine

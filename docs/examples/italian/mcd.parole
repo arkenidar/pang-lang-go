@@ -1,0 +1,9 @@
+definisci_parola "mcd" 2
+  se uguale 0 argomento 2
+    argomento 1
+    mcd argomento 2 modulo argomento 1 argomento 2
+
+stampa "mcd(48, 18) ="
+stampa mcd 48 18
+stampa "mcd(1071, 462) ="
+stampa mcd 1071 462

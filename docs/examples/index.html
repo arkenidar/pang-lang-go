@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examples part of RS Lang Words documentation</title>
+</head>
+
+<body>
+    <pre id="file-content"></pre>
+    <div id="language-links"></div>
+    <script>
+        const english = ["words", ["hello",
+            "collatz",
+            "factorial",
+            "fibonacci",
+            "fizzbuzz",
+            "gcd",
+            "repeat",
+            "strings",
+        ]]
+        const italian = ["parole", ["ciao",
+            "collatz",
+            "fattoriale",
+            "fibonacci",
+            "fizzbuzz",
+            "mcd",
+            "ripeti",
+            "stringhe",
+        ]]
+        const languages = { english, italian }
+        function language_links(language, languageName) {
+            let links = document.getElementById("language-links")
+            let list = document.createElement("ul")
+            for (let i = 0; i < language[1].length; i++) {
+                let item = document.createElement("li")
+                let link = document.createElement("a")
+                link.href = languageName + "/" + language[1][i] + "." + language[0]
+                link.onclick = function (event) {
+                    event.preventDefault()
+                    fetch(link.href)
+                        .then(response => response.text())
+                        .then(data => {
+                            document.getElementById("file-content").textContent = data
+                        })
+                }
+                link.textContent = language[1][i]
+                item.appendChild(link)
+                list.appendChild(item)
+            }
+            links.appendChild(list)
+        }
+        for (const [languageName, language] of Object.entries(languages)) {
+            language_links(language, languageName)
+        }
+    </script>
+
+</body>
+
+</html>

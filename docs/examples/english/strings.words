@@ -1,0 +1,4 @@
+print "Hello, world!"
+print "line1\nline2"
+print "tab:\there"
+print "quote: \"inside quotes\""

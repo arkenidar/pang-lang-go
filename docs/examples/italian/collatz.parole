@@ -1,0 +1,16 @@
+definisci_parola "collatz" 1 fai
+  metti "n" argomento 1
+  metti "passi" 0
+  mentre non uguale prendi "n" 1 fai
+    stampa prendi "n"
+    se uguale 0 modulo prendi "n" 2
+      metti "n" moltiplica prendi "n" 0.5
+      metti "n" somma moltiplica prendi "n" 3 1
+    metti "passi" somma prendi "passi" 1
+  fine
+  stampa 1
+  stampa "passi:"
+  stampa prendi "passi"
+fine
+
+collatz 6

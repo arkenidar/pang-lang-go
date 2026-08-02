@@ -1,0 +1,11 @@
+set "i" 1
+while not greater get "i" 20 do
+  if equal 0 modulus get "i" 15
+    print "FizzBuzz"
+  if equal 0 modulus get "i" 3
+    print "Fizz"
+  if equal 0 modulus get "i" 5
+    print "Buzz"
+  print get "i"
+  set "i" add get "i" 1
+end

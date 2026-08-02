@@ -1,0 +1,11 @@
+definisci_parola "fib" 1
+  se uguale argomento 1 0
+    0
+    se uguale argomento 1 1
+      1
+      somma fib somma -1 argomento 1 fib somma -2 argomento 1
+
+stampa "Fibonacci(10):"
+stampa fib 10
+stampa "Fibonacci(20):"
+stampa fib 20

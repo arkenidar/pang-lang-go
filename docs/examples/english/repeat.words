@@ -1,0 +1,10 @@
+set "sum" 0
+set "i" 1
+
+repeat 10 do
+  set "sum" add get "sum" get "i"
+  set "i" add get "i" 1
+end
+
+print "Sum of 1..10:"
+print get "sum"

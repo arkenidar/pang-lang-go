@@ -1,0 +1,4 @@
+stampa "Ciao, mondo!"
+stampa "riga1\nriga2"
+stampa "tab:\tqui"
+stampa "virgolette: \"dentro le virgolette\""

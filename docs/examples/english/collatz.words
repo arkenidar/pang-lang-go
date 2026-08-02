@@ -1,0 +1,16 @@
+define_word "collatz" 1 do
+  set "n" argument 1
+  set "steps" 0
+  while not equal get "n" 1 do
+    print get "n"
+    if equal 0 modulus get "n" 2
+      set "n" multiply get "n" 0.5
+      set "n" add multiply get "n" 3 1
+    set "steps" add get "steps" 1
+  end
+  print 1
+  print "steps:"
+  print get "steps"
+end
+
+collatz 6

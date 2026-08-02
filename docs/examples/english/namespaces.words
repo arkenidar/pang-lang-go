@@ -1,0 +1,28 @@
+define_word "make_counter" 0 do
+  set "ns" namespace
+  variable_set get "ns" "count" 0
+  get "ns"
+end
+
+define_word "tick" 1 do
+  set "ns" argument 1
+  variable_set get "ns" "count" add variable_get get "ns" "count" 1
+  variable_get get "ns" "count"
+end
+
+set "counter_a" make_counter
+set "counter_b" make_counter
+
+print "Tick counter_a three times:"
+print tick get "counter_a"
+print tick get "counter_a"
+print tick get "counter_a"
+
+print "Tick counter_b once:"
+print tick get "counter_b"
+
+print "Tick counter_a again:"
+print tick get "counter_a"
+
+print "Read counter_b (should be 1):"
+print variable_get get "counter_b" "count"

@@ -1,0 +1,9 @@
+define_word "gcd" 2
+  if equal 0 argument 2
+    argument 1
+    gcd argument 2 modulus argument 1 argument 2
+
+print "gcd(48, 18) ="
+print gcd 48 18
+print "gcd(1071, 462) ="
+print gcd 1071 462
