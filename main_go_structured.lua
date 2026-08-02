@@ -121,7 +121,6 @@ function word_defs_init()
     -- print <printable>
     word_definitions[tr("print")] = {1, function(arguments)
         local val = evaluate_word(arguments[1])
-        if val == ";" then return val end
         print(val)
         return val
     end}
@@ -130,13 +129,13 @@ function word_defs_init()
     word_definitions[tr("read_text")] = {0, function()
         local text = io.read()
         if text == nil then return "" end
-        return text
+        return text:gsub("[\r\n]+$", "")
     end}
 
     -- to_number <text>
     word_definitions[tr("to_number")] = {1, function(arguments)
         local val = evaluate_word(arguments[1])
-        return tonumber(val)
+        return tonumber(val) or 0
     end}
 
     -- add <number> <number>
@@ -409,7 +408,7 @@ function phrase_length(word_index)
     -- do ... end blocks
     if word == tr("do") then
         while true do
-            local look_ahead = word_index + length - 1
+            local look_ahead = word_index + length
             if look_ahead > #words or words[look_ahead] == tr("end") then
                 return length + 1
             end
