@@ -547,7 +547,7 @@ namespace pang
     void PangInterpreter::initWordDefs()
     {
         // Initialize call stack with one empty frame.
-        callStack.emplace_back();
+        callStack.push_back(std::make_shared<Namespace>());
 
         // print <printable>
         wordDefs[tr("print")] = {1, [this](const std::vector<int> &args) -> Value
@@ -560,7 +560,7 @@ namespace pang
                                                     {
                                                         std::cout << "nil\n";
                                                     }
-                                                    else if constexpr (std::is_same_v<T, Namespace *>)
+                                                    else if constexpr (std::is_same_v<T, std::shared_ptr<Namespace>>)
                                                     {
                                                         std::cout << "[namespace]\n";
                                                     }
@@ -708,14 +708,14 @@ namespace pang
                                      {
                                          return *sa == std::get<std::string>(b);
                                      }
-                                     // Namespace equality — compare pointers (same object)
-                                     return std::get<Namespace *>(a) == std::get<Namespace *>(b);
+                                     // Namespace equality — compare shared_ptrs (same object)
+                                     return std::get<std::shared_ptr<Namespace>>(a) == std::get<std::shared_ptr<Namespace>>(b);
                                  }};
 
         // set <variable name> <value>
         wordDefs[tr("set")] = {2, [this](const std::vector<int> &args) -> Value
                                {
-                                   Namespace &vars = callStack.back();
+                                   Namespace &vars = *callStack.back();
                                    Value nameVal = evaluateWord(args[0]);
                                    std::string varName = std::get<std::string>(nameVal);
                                    vars.vars[varName] = evaluateWord(args[1]);
@@ -725,7 +725,7 @@ namespace pang
         // get <variable name>
         wordDefs[tr("get")] = {1, [this](const std::vector<int> &args) -> Value
                                {
-                                   Namespace &vars = callStack.back();
+                                   Namespace &vars = *callStack.back();
                                    Value nameVal = evaluateWord(args[0]);
                                    std::string varName = std::get<std::string>(nameVal);
                                    auto it = vars.vars.find(varName);
@@ -741,7 +741,7 @@ namespace pang
         wordDefs[tr("variable_set")] = {3, [this](const std::vector<int> &args) -> Value
                                         {
                                             Value nsVal = evaluateWord(args[0]);
-                                            Namespace *ns = std::get<Namespace *>(nsVal);
+                                            auto ns = std::get<std::shared_ptr<Namespace>>(nsVal);
                                             Value nameVal = evaluateWord(args[1]);
                                             std::string varName = std::get<std::string>(nameVal);
                                             ns->vars[varName] = evaluateWord(args[2]);
@@ -752,7 +752,7 @@ namespace pang
         wordDefs[tr("variable_get")] = {2, [this](const std::vector<int> &args) -> Value
                                         {
                                             Value nsVal = evaluateWord(args[0]);
-                                            Namespace *ns = std::get<Namespace *>(nsVal);
+                                            auto ns = std::get<std::shared_ptr<Namespace>>(nsVal);
                                             Value nameVal = evaluateWord(args[1]);
                                             std::string varName = std::get<std::string>(nameVal);
                                             auto it = ns->vars.find(varName);
@@ -763,9 +763,9 @@ namespace pang
                                             return it->second;
                                         }};
 
-        // namespace — returns current call stack frame (as pointer)
+        // namespace — returns current call stack frame (as shared_ptr)
         wordDefs["namespace"] = {0, [this](const std::vector<int> &) -> Value
-                                 { return &callStack.back(); }};
+                                 { return callStack.back(); }};
 
         // modulus <dividend> <divisor>
         wordDefs[tr("modulus")] = {2, [this](const std::vector<int> &args) -> Value
@@ -821,12 +821,12 @@ namespace pang
                                            wd.arity = arity;
                                            wd.fn = [this, bodyIndex](const std::vector<int> &wordArgs) -> Value
                                            {
-                                               Namespace valueArgs;
+                                               auto valueArgs = std::make_shared<Namespace>();
                                                for (std::size_t i = 0; i < wordArgs.size(); ++i)
                                                {
-                                                   valueArgs.vars[std::to_string(i + 1)] = evaluateWord(wordArgs[i]);
+                                                   valueArgs->vars[std::to_string(i + 1)] = evaluateWord(wordArgs[i]);
                                                }
-                                               callStack.push_back(std::move(valueArgs));
+                                               callStack.push_back(valueArgs);
                                                Value result = evaluateWord(bodyIndex);
                                                callStack.pop_back();
                                                return result;
@@ -838,7 +838,7 @@ namespace pang
         // argument <argument index>
         wordDefs[tr("argument")] = {1, [this](const std::vector<int> &args) -> Value
                                     {
-                                        Namespace &frame = callStack.back();
+                                        Namespace &frame = *callStack.back();
                                         Value idxVal = evaluateWord(args[0]);
                                         std::string argIndex = std::to_string(static_cast<int>(std::get<double>(idxVal)));
                                         auto it = frame.vars.find(argIndex);
@@ -866,7 +866,7 @@ namespace pang
         // increment <variable name>
         wordDefs[tr("increment")] = {1, [this](const std::vector<int> &args) -> Value
                                      {
-                                         Namespace &vars = callStack.back();
+                                         Namespace &vars = *callStack.back();
                                          Value nameVal = evaluateWord(args[0]);
                                          std::string varName = std::get<std::string>(nameVal);
                                          auto it = vars.vars.find(varName);

@@ -11,6 +11,7 @@
 #define PANG_INTERPRETER_HPP
 
 #include <functional>
+#include <memory>
 #include <optional>
 #include <string>
 #include <string_view>
@@ -26,17 +27,19 @@ namespace pang
     // =========================================================================
     //
     // Recursive variant design:
-    //   Value uses Namespace* (pointer) to avoid circular completeness
+    //   Value uses std::shared_ptr<Namespace> to avoid circular completeness
     //   requirement. Namespace is then defined as map<string, Value>.
-    //   callStack owns the actual Namespace objects; Value merely points to them.
+    //   callStack owns shared_ptrs to Namespace objects; Value shares ownership.
+    //   This ensures namespace objects survive after being popped from the
+    //   call stack (matching Go's map and Lua's table reference semantics).
 
     struct Namespace;
     using Value = std::variant<
-        std::monostate, // nil
-        double,         // number
-        bool,           // boolean
-        std::string,    // string
-        Namespace *     // variable namespace (pointer into callStack)
+        std::monostate,            // nil
+        double,                    // number
+        bool,                      // boolean
+        std::string,               // string
+        std::shared_ptr<Namespace> // variable namespace (shared ownership)
         >;
 
     struct Namespace
@@ -79,8 +82,8 @@ namespace pang
         // --- State ---
         std::unordered_map<std::string, WordDef> wordDefs;
         std::vector<std::string> words;
-        std::vector<bool> stringLiterals; // true if word at same index is a string literal
-        std::vector<Namespace> callStack; // one frame per scope (owns Namespace objects)
+        std::vector<bool> stringLiterals;                  // true if word at same index is a string literal
+        std::vector<std::shared_ptr<Namespace>> callStack; // one frame per scope (shared ownership)
         std::vector<std::string> fileDirectoryStack;
         std::string language; // "" or "italian"
         bool exitRequested = false;
